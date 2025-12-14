@@ -282,26 +282,32 @@ int main(){
 
 #!/bin/bash
 
+# ON SUPPOSE FICHIER S APPLEE WILDWATER
 
+comment le prog c va savoir le choix de l utilsateur genre hito leaks 
+generation de l histo 
+gener un fcihier csv selon le choix de l user max src etc avec en tete avec les donne utile dans l rodre alphabetique inverse
 
-
-
-duree_tot()
-{
-    fin_t=$((date +%s))
-    reel_d=$((fin_t - START_TIME))
-    echo "DUREE TOTALE : $((reel_d * 1000)) ms"
+max unsine 
+src souce usine 
+real usine ety source usine
+# aff dure totale en ms
+duree_totale() {
+    fin_tps=$(date +%s)
+    r_duree=$((fin_tps - START_TIME))
+    echo "La durée totale est : $((r_duree * 1000)) mili-seconde"
 }
 
-fct_error()
-{
-    echo "ERROR : $1" > &2
-    duree_tot
+#aff une erreur et art le script
+fct_error() {
+    echo "Erreur : $1" >&2
+    duree_totale
     exit 1
 }
 
-verif_arg()
-{
+
+# récupérer les arguments ecrit ds terlmianl
+recup_arg() {
     if [ $# -lt 2 ]; then
         fct_error "Reesayer manque d'arguments"
     fi
@@ -312,14 +318,40 @@ verif_arg()
     NB_ARG=$# #nb argument
 }
 
-arg_valid()
-{
+
+# vérif la validité des arguments
+arg_valid_T() {
     case "$Type" in
         histo)
-            if [ "$NB_ARG" -ne 3]; then
-            
+            if [ "$NB_ARG" -ne 3 ]; then
+                fct_error "Nombre d'arguments insuffisant pour histo !"
+            fi
+            if [ "$OPTION" != "max" ] && [ "$OPTION" != "src" ] && [ "$OPTION" != "real" ]; then
+                fct_error "Option invalide (max | src | real)"
+            fi
+            ;;
+        leaks)
+            if [ "$NB_ARG" -ne 3 ]; then # le prog shell ne verifie pas si l' id existe ou pas !
+                fct_error "Nombre d'arguments insuffisant pour leaks !"
+            fi
+            ;;
+        *)
+            fct_error "Type inconnu (histo | leaks)"
+            ;;
+    esac
 }
 
+
+# vérif l'existence/ lecrure fichier
+verif_fichier() {
+    if [ ! -f "$fichier_d" ]; then # si fichier
+        fct_error "Fichier introuvable : ("
+    fi
+
+    if [ ! -r "$fichier_d" ]; then # si on permission de le lire
+        fct_error "Fichier non lisible"
+    fi
+}
 
 
 
