@@ -278,6 +278,47 @@ int main(){
 	
 }
 
+//Partie shell
+
+#!/bin/bash
+
+
+
+
+
+duree_tot()
+{
+    fin_t=$((date +%s))
+    reel_d=$((fin_t - START_TIME))
+    echo "DUREE TOTALE : $((reel_d * 1000)) ms"
+}
+
+fct_error()
+{
+    echo "ERROR : $1" > &2
+    duree_tot
+    exit 1
+}
+
+verif_arg()
+{
+    if [ $# -lt 2 ]; then
+        fct_error "Reesayer manque d'arguments"
+    fi
+
+    fichier_d="$1" #chemin du fichier
+    Type="$2" #histo ou leaks 
+    OPTION="$3" # max src real id usine
+    NB_ARG=$# #nb argument
+}
+
+arg_valid()
+{
+    case "$Type" in
+        histo)
+            if [ "$NB_ARG" -ne 3]; then
+            
+}
 
 
 
