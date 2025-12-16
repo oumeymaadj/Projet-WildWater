@@ -2,12 +2,18 @@
 
 Avl * creerAVL(Usine r){
     Avl* noeud = malloc(sizeof(Avl));
+	if(noeud == NULL){
+		exit(1);
+	}
 
     noeud->us.cap_max_trait = r.cap_max_trait;
     noeud->us.volume_total_capte = r.volume_total_capte;
     noeud->us.volume_reel_traite = r.volume_reel_traite;
 
     noeud->us.id_usine = malloc(strlen(r.id_usine) + 1);
+	if(noeud->us.id_usine == NULL){
+		exit(2);
+	}
     strcpy(noeud->us.id_usine, r.id_usine);
 
     noeud->fg = NULL;
@@ -47,31 +53,6 @@ int existeFilsDroit(Avl * a){
 	}
 }
 
-int ajouterFilsGauche(Avl * a, Usine e){
-	if(estVide(a)){
-		return 0;
-	}
-	else if(!existeFilsGauche(a)){
-		a->fg = creerAVL(e);
-		return 1;
-	}
-	else{
-		return 0;
-	}	
-}
-
-int ajouterFilsDroit(Avl * a, Usine e){
-	if(estVide(a)){
-		return 0;
-	}
-	else if(!existeFilsDroit(a)){
-		a->fd = creerAVL(e);
-		return 1;
-	}
-	else{
-		return 0;
-	}	
-}
 
 int min(int a, int b) {
     if(a < b){
@@ -237,77 +218,6 @@ Avl* insertionAVL(Avl* a, Usine e, int *h){
 }
 
 
-Avl* suppMinAVL(Avl* a, int *h, Usine *pe){
-	Avl* tmp; 
-	if(a->fg == NULL){
-		free(pe->id_usine);
-		pe->id_usine = a->us.id_usine;
-        pe->cap_max_trait = a->us.cap_max_trait;
-        pe->volume_total_capte = a->us.volume_total_capte;
-        pe->volume_reel_traite = a->us.volume_reel_traite;
-		*h = -1;
-		tmp = a;
-		a = a->fd;
-		free(tmp);
-		return a;
-	}
-	else{
-		a->fg = suppMinAVL(a->fg, h, pe);
-		*h = -*h;
-	}
-	
-	if(*h != 0){
-		a->equilibre = a->equilibre + *h;
-		a = equilibrerAVL(a);
-		if(a->equilibre == 0){
-			*h = -1;
-		}
-		else{
-			*h = 0;
-		}
-	}
-	return a;
-}
-
-
-Avl* suppressionAVL(Avl* a, Usine e, int *h){
-	Avl* tmp;
-	
-	if(a==NULL){
-		*h = 0;
-		return a;
-	}
-	else if(comparer_chaine(e.id_usine, a->us.id_usine) == 2){
-		a->fd = suppressionAVL(a->fd, e,h);
-	}
-	else if(comparer_chaine(e.id_usine, a->us.id_usine) == 1){
-		a->fg = suppressionAVL(a->fg, e,h);
-		*h = -*h;
-	}
-	else{
-		if(existeFilsDroit(a)){
-		    a->fd = suppMinAVL(a->fd, h, &(a->us));
-	    }
-	    else{
-		    tmp = a;
-		    a = a->fg;
-		    free(tmp);
-		    *h = -1;
-		    return a;
-	    }
-    }
-	if(*h != 0){
-		a->equilibre = a->equilibre + *h;
-		a = equilibrerAVL(a);
-		if(a->equilibre == 0){
-			*h = -1;
-		}
-		else{
-			*h = 0;
-		}
-	}
-	return a;
-}
 
 
 void libererAVL(Avl* a){
@@ -335,154 +245,9 @@ Avl* rechercheAVL(Avl *a, char *id_usn){
 	return NULL;
 }
 
-Avl* traiter_ligne_usine(Avl* racine, char *id, double capacite){
-	Avl *n = rechercheAVL(racine,id);
-	if(n == NULL){
-		Usine u;
-		u.id_usine = strdup(id);
-		if(u.id_usine == NULL){
-			exit(3);
-		}
-		u.cap_max_trait = capacite;
-		u.volume_total_capte = 0;
-		u.volume_reel_traite = 0;
-		int h =0;
-		racine = insertionAVL(racine,u,&h);
-	}
-	else{
-		n->us.cap_max_trait = capacite;
-	}	
-	return racine;
-
-}
-
-Avl * traiter_ligne_source(Avl* racine, char *id, double volume, double fuite){
-	Avl *n = rechercheAVL(racine,id);
-	if(n == NULL){
-		Usine u;
-		u.id_usine = strdup(id);
-		if(u.id_usine == NULL){
-			exit(3);
-		}
-		u.cap_max_trait = 0;
-		u.volume_total_capte = volume;
-		u.volume_reel_traite = volume * (1.0 -  fuite / 100.0);
-		int h =0;
-		racine = insertionAVL(racine,u,&h);
-	}
-	else{
-		n->us.volume_total_capte += volume;
-	    n->us.volume_reel_traite += volume *( 1.0 - fuite /100.0);   
-	}
-	return racine;
-}
-
-
-
-/// ----------------------------------------------------------------------------------------------
 
 
 
 
-Avl* lire_fichier_histo(char *nom_fichier)
-{
-    FILE *f = fopen(nom_fichier, "r");
-    if (f == NULL) {
-        perror("Erreur ouverture fichier histo");
-        exit(1);
-    }
-
-    Avl *racine = NULL;
-    char ligne[256];
-
-    while (fgets(ligne, sizeof(ligne), f)) {
-
-        // enlever le \n
-        ligne[strcspn(ligne, "\n")] = '\0';
-
-        char *type = strtok(ligne, ";");
-
-        if (type == NULL) continue;
-
-        // ----- CAS USINE -----
-        if (strcmp(type, "USINE") == 0) {
-
-            char *id = strtok(NULL, ";");
-            char *cap_str = strtok(NULL, ";");
-
-            if (id == NULL || cap_str == NULL) {
-                printf("Ligne USINE invalide\n");
-                continue;
-            }
-
-            double capacite = atof(cap_str);
-            racine = traiter_ligne_usine(racine, id, capacite);
-        }
-
-        // ----- CAS SOURCE -----
-        else if (strcmp(type, "SOURCE") == 0) {
-
-            char *id = strtok(NULL, ";");
-            char *vol_str = strtok(NULL, ";");
-            char *fuite_str = strtok(NULL, ";");
-
-            if (id == NULL || vol_str == NULL || fuite_str == NULL) {
-                printf("Ligne SOURCE invalide\n");
-                continue;
-            }
-
-            double volume = atof(vol_str);
-            double fuite = atof(fuite_str);
-
-            if (!traiter_ligne_source(racine, id, volume, fuite)) {
-                printf("Erreur traitement SOURCE pour %s\n", id);
-                fclose(f);
-                exit(2);
-            }
-        }
-    }
-
-    fclose(f);
-    return racine;
-}
-
-
-/// -----------------------------------------------------------------------------------------------
-
-
-//On va faire un parcours infixe récursif.
-
-void ecrire_resultat_histo_rec_inverse(Avl *a, FILE *f)
-{
-    if (a == NULL){
-		return ;
-	}
-
-    ecrire_resultat_histo_rec(a->fd, f);
-
-    fprintf(f, "%s;%.2f;%.2f;%.2f\n",
-            a->us.id_usine,
-            a->us.cap_max_trait / 1000.0,
-            a->us.volume_total_capte / 1000.0,
-            a->us.volume_reel_traite / 1000.0);
-
-    ecrire_resultat_histo_rec(a->fg, f);
-}
-
-void ecrire_resultat_histo(Avl *racine,char *nom_fichier)
-{
-    FILE *f = fopen(nom_fichier, "w");
-    if (f == NULL) {
-        perror("Erreur ouverture fichier resultat histo");
-        exit(4);
-    }
-
-    // en-tête
-    fprintf(f, "id_usine;cap_max;volume_capte;volume_reel\n");
-
-    ecrire_resultat_histo_rec(racine, f);
-
-    fclose(f);
-}
 
 
