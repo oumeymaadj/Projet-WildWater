@@ -1,4 +1,4 @@
-corrige mon code #!/bin/bash
+#!/bin/bash
 
 # ON SUPPOSE FICHIER S APPELLE WILDWATER
 
