@@ -1,6 +1,5 @@
 #include"leak.h"
 
-
 int recupereLigne1(FILE * nomFichier, char *id_us,char *id_amont,char *id_aval,double *cap, double *fuite){
     char ligne[300];
     id_us[0] = '\0';
