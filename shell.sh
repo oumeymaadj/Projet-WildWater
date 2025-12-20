@@ -45,8 +45,8 @@ arg_valid_T() {
                 fct_error "Nombre d'arguments insuffisant pour histo !"
             fi
 
-            if [ "$Option" != "src" ] && [ "$Option" != "max" ] && [ "$Option" != "real" ]; then
-                fct_error "Option invalide choissir entre | max ; src ; real |"
+            if [ "$Option" != "src" ] && [ "$Option" != "max" ] && [ "$Option" != "all" ] && [ "$Option" != "real" ]; then
+                fct_error "Option invalide choissir entre | max ; src ; real ; all |"
             fi
             ;;
             
