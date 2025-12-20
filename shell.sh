@@ -113,29 +113,32 @@ generation_image() {
         fct_error "Fichier pour la generation d'image introuvable : $Fichier_data"
     fi
 
-    gnuplot << EOF
+  gnuplot << EOF
 set terminal png size 900,600
 set datafile separator ";"
-set style fill solid
 set grid
 set xtics rotate by -45
+set style fill solid 0.8 border -1
+set boxwidth 0.7
+set style line 1 lc rgb "#1f77b4"
 
 # 50 plus petites usines
 set output "${Fichier_data%.dat}_50_small.png"
 set title "50 plus petites usines (${Option})"
 set xlabel "Usines"
-set ylabel "Volume"
-plot "< tail -n +2 $Fichier_data | sort -t';' -k2,2n | head -n 50" using 2:xtic(1) with boxes notitle
-     
+set ylabel "Volume (M.m3)"
+plot "< tail -n +2 $Fichier_data | sort -t';' -k2,2n | head -n 50" \
+     using 2:xtic(1) with boxes ls 1 notitle
 
 # 10 plus grandes usines
 set output "${Fichier_data%.dat}_10_large.png"
 set title "10 plus grandes usines (${Option})"
 set xlabel "Usines"
-set ylabel "Volume"
-plot "< tail -n +2 $Fichier_data | sort -t';' -k2,2nr | head -n 10" using 2:xtic(1) with boxes notitle
-     
+set ylabel "Volume (M.m3)"
+plot "< tail -n +2 $Fichier_data | sort -t';' -k2,2nr | head -n 10" \
+     using 2:xtic(1) with boxes ls 1 notitle
 EOF
+
 
     if [ $? -ne 0 ]; then
         fct_error "Erreur lors de la generation des images"
