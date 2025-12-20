@@ -1,7 +1,7 @@
 #include"leak.h"
 
 
-int recupereLigne(FILE * nomFichier, char *id_us,char *id_amont,char *id_aval,double *cap, double *fuite){
+int recupereLigne1(FILE * nomFichier, char *id_us,char *id_amont,char *id_aval,double *cap, double *fuite){
     char ligne[300];
     id_us[0] = '\0';
     id_amont[0] = '\0';
@@ -105,7 +105,7 @@ void ajouter_enfant(Noeud *parent, Noeud *fils, double fuit){
 
 
 
-int comparer_chaine(char *s1,char *s2) { // 1 -> s1 < s2 ; 2 -> s1 > s2 ; 5 -> s1 = s2
+int comparer_chaine1(char *s1,char *s2) { // 1 -> s1 < s2 ; 2 -> s1 > s2 ; 5 -> s1 = s2
     int i = 0;
     while (s1[i] != '\0' && s2[i] != '\0') {
         if (s1[i] < s2[i]) {
@@ -128,23 +128,23 @@ int comparer_chaine(char *s1,char *s2) { // 1 -> s1 < s2 ; 2 -> s1 > s2 ; 5 -> s
 }
 
 
-Noeud* recherche_noeudAVL(Avl *a, char *id_usn){
+Noeud* recherche_noeudAVL(Avl2 *a, char *id_usn){
 	if(a == NULL){
 		return NULL;
 	}
-	else if(comparer_chaine(id_usn,a->id_cle) == 5){
+	else if(comparer_chaine1(id_usn,a->id_cle) == 5){
 		return a->valeur;
 	}
-	else if(comparer_chaine(id_usn,a->id_cle) == 1){
+	else if(comparer_chaine1(id_usn,a->id_cle) == 1){
 		return recherche_noeudAVL(a->fg,id_usn);
 	}
-	else if(comparer_chaine(id_usn,a->id_cle) == 2){
+	else if(comparer_chaine1(id_usn,a->id_cle) == 2){
 		return recherche_noeudAVL(a->fd,id_usn);
 	}
 	return NULL;
 }
 
-int retrouver_usine(Avl *a,char *id_usine, Noeud **usine){
+int retrouver_usine(Avl2 *a,char *id_usine, Noeud **usine){
     *usine = recherche_noeudAVL(a, id_usine);
 
     if(*usine == NULL){
@@ -192,7 +192,7 @@ double km3_to_Mm3(double volume_km3){
 }
 
 
-int min(int a, int b) {
+int min1(int a, int b) {
     if(a < b){
         return a;
     } 
@@ -201,7 +201,7 @@ int min(int a, int b) {
     }    
 }
 
-int max(int a, int b) {
+int max1(int a, int b) {
     if (a > b){
         return a;
     }    
@@ -211,7 +211,7 @@ int max(int a, int b) {
 }
 
 
-int min3(int a, int b, int c) {
+int min4(int a, int b, int c) {
     int m = a;
     if (b < m)
         m = b;
@@ -220,7 +220,7 @@ int min3(int a, int b, int c) {
     return m;
 }
 
-int max3(int a, int b, int c) {
+int max4(int a, int b, int c) {
     int m = a;
     if (b > m)
         m = b;
@@ -230,8 +230,8 @@ int max3(int a, int b, int c) {
 }
 
 
-Avl* rotationDroite(Avl* a){
-	Avl* pivot;
+Avl2* rotationDroite1(Avl2* a){
+	Avl2* pivot;
 	int eq_a, eq_p;
 	
 	pivot = a->fg;
@@ -241,16 +241,16 @@ Avl* rotationDroite(Avl* a){
 	eq_a = a->equilibre;
 	eq_p = pivot->equilibre;
 	
-	a->equilibre = eq_a - min(eq_p, 0) +1;
-	pivot->equilibre = max3(eq_a+2, eq_a+eq_p+2, eq_p+1);
+	a->equilibre = eq_a - min1(eq_p, 0) +1;
+	pivot->equilibre = max4(eq_a+2, eq_a+eq_p+2, eq_p+1);
 	a = pivot; 
 	
 	return a;
 }
 
 
-Avl * rotationGauche(Avl* a){
-	Avl * pivot;
+Avl2 * rotationGauche1(Avl2* a){
+	Avl2 * pivot;
 	int eq_a, eq_p;
 	
 	pivot = a->fd;
@@ -260,48 +260,48 @@ Avl * rotationGauche(Avl* a){
 	eq_a = a->equilibre;
 	eq_p = pivot->equilibre;
 	
-	a->equilibre = eq_a - max(eq_p, 0) -1;
-	pivot->equilibre = min3(eq_a-2, eq_a+eq_p-2, eq_p-1);
+	a->equilibre = eq_a - max1(eq_p, 0) -1;
+	pivot->equilibre = min4(eq_a-2, eq_a+eq_p-2, eq_p-1);
 	a = pivot; 
 	
 	return a;
 }
 
-Avl* doubleRotationGauche(Avl* a){
-	a->fd = rotationDroite(a->fd);
-	return rotationGauche(a);
+Avl2* doubleRotationGauche1(Avl2* a){
+	a->fd = rotationDroite1(a->fd);
+	return rotationGauche1(a);
 }
 
-Avl* doubleRotationDroite(Avl* a){
-	a->fg = rotationGauche(a->fg);
-	return rotationDroite(a);
+Avl2* doubleRotationDroite1(Avl2* a){
+	a->fg = rotationGauche1(a->fg);
+	return rotationDroite1(a);
 }
 
-Avl* equilibrerAVL(Avl* a){
+Avl2* equilibrerAVL1(Avl2* a){
 	if(a==NULL){
 		return NULL;
 	}
 	if(a->equilibre >= 2){
 		if(a->fd != NULL && a->fd->equilibre >= 0){
-			return rotationGauche(a);
+			return rotationGauche1(a);
 		}
 		else{
-			return doubleRotationGauche(a);
+			return doubleRotationGauche1(a);
 		}
 	}
 	else if(a->equilibre <= -2){
 		if(a->fg != NULL && a->fg->equilibre <= 0){
-			return rotationDroite(a);
+			return rotationDroite1(a);
 		}
 		else{
-			return doubleRotationDroite(a);
+			return doubleRotationDroite1(a);
 		}
 	}
 	return a;
 }
 
-Avl *creerAVL(char *id, Noeud *val){
-    Avl *a = malloc(sizeof(Avl));
+Avl2 *creerAVL2(char *id, Noeud *val){
+    Avl2 *a = malloc(sizeof(Avl2));
     if (a == NULL) {
         exit(4);
     }
@@ -322,17 +322,17 @@ Avl *creerAVL(char *id, Noeud *val){
     return a;
 }
 
-Avl* insertionAVL(Avl* a, char *e, Noeud *val,int *h){
+Avl2* insertionAVL1(Avl2* a, char *e, Noeud *val,int *h){
 	if(a==NULL){
 		*h = 1;
-		return creerAVL(e,val);
+		return creerAVL2(e,val);
 	}
-	else if(comparer_chaine(e,a->id_cle) == 1){
-		a->fg = insertionAVL(a->fg, e, val,h);
+	else if(comparer_chaine1(e,a->id_cle) == 1){
+		a->fg = insertionAVL1(a->fg, e, val,h);
 		*h = -(*h);
 	}
-	else if(comparer_chaine(e,a->id_cle) == 2){
-		a->fd = insertionAVL(a->fd, e, val,h);
+	else if(comparer_chaine1(e,a->id_cle) == 2){
+		a->fd = insertionAVL1(a->fd, e, val,h);
 	}
 	else{
 		*h = 0;
@@ -340,7 +340,7 @@ Avl* insertionAVL(Avl* a, char *e, Noeud *val,int *h){
 	}
 	if(*h != 0){
 		a->equilibre = a->equilibre + *h;
-		a = equilibrerAVL(a);
+		a = equilibrerAVL1(a);
 		if(a->equilibre == 0){
 			*h = 0;
 		}
@@ -352,13 +352,13 @@ Avl* insertionAVL(Avl* a, char *e, Noeud *val,int *h){
 }
 
 
-Noeud *recuperer_ou_creer_noeud(Avl **arbre, char *id){
+Noeud *recuperer_ou_creer_noeud(Avl2 **arbre, char *id){
     Noeud *n;
     int h = 0;
     if(id == NULL){
         return NULL;
     }
-    if(comparer_chaine(id, "-") == 5){
+    if(comparer_chaine1(id, "-") == 5){
         return NULL;
     }
     n = recherche_noeudAVL(*arbre, id);
@@ -366,12 +366,12 @@ Noeud *recuperer_ou_creer_noeud(Avl **arbre, char *id){
         return n;
     }
     n = creer_noeud(id);
-    *arbre = insertionAVL(*arbre, id, n, &h);
+    *arbre = insertionAVL1(*arbre, id, n, &h);
     return n;
 }
 
 
-int construire_reseau(FILE *f, Avl **arbre, char *id_usine, double *volume_entree_usine){
+int construire_reseau(FILE *f, Avl2 **arbre, char *id_usine, double *volume_entree_usine){
     char id_us[256];      
     char id_amont[256];   
     char id_aval[256];    
@@ -380,16 +380,16 @@ int construire_reseau(FILE *f, Avl **arbre, char *id_usine, double *volume_entre
     Noeud *noeud_amont;
     Noeud *noeud_aval;
     *volume_entree_usine = 0.0;
-    while(recupereLigne(f, id_us, id_amont, id_aval, &cap, &fuite) == 1){
-        if(comparer_chaine(id_us, "-") == 5 &&
-           comparer_chaine(id_aval, id_usine) == 5 &&
+    while(recupereLigne1(f, id_us, id_amont, id_aval, &cap, &fuite) == 1){
+        if(comparer_chaine1(id_us, "-") == 5 &&
+           comparer_chaine1(id_aval, id_usine) == 5 &&
            cap > 0){
 
             *volume_entree_usine += cap * (1.0 - fuite / 100.0);
             continue;
         }
-        if(comparer_chaine(id_us, "-") == 5 &&
-           comparer_chaine(id_amont, id_usine) == 5 &&
+        if(comparer_chaine1(id_us, "-") == 5 &&
+           comparer_chaine1(id_amont, id_usine) == 5 &&
            id_aval[0] != '\0'){
 
             noeud_amont = recuperer_ou_creer_noeud(arbre, id_amont);
@@ -400,7 +400,7 @@ int construire_reseau(FILE *f, Avl **arbre, char *id_usine, double *volume_entre
             }
             continue;
         }
-        if(comparer_chaine(id_us, id_usine) == 5){
+        if(comparer_chaine1(id_us, id_usine) == 5){
 
             noeud_amont = recuperer_ou_creer_noeud(arbre, id_amont);
             noeud_aval  = recuperer_ou_creer_noeud(arbre, id_aval);
@@ -413,7 +413,7 @@ int construire_reseau(FILE *f, Avl **arbre, char *id_usine, double *volume_entre
     return 0;
 }
 
-int ecrire_fuite_dat(const char *nom_fichier, const char *id_usine, double fuite_Mm3){
+int ecrire_fuite_dat( char *nom_fichier, char *id_usine, double fuite_Mm3){
     FILE *f = fopen(nom_fichier, "a");
     if(f == NULL){
         return 1; 
@@ -444,7 +444,7 @@ void liberer_noeud(Noeud *n){
     free(n);
 }
 
-void liberer_avl(Avl *a){
+void liberer_avl(Avl2 *a){
     if(a == NULL){
         return;
     }
@@ -458,7 +458,7 @@ void liberer_avl(Avl *a){
 }
 
 
-void liberer_reseau(Avl **arbre){
+void liberer_reseau(Avl2 **arbre){
     if(arbre == NULL || *arbre == NULL){
         return;
     }

@@ -24,7 +24,7 @@ Avl* traiter_ligne_usine(Avl* racine, char *id, double capacite){
 }
 
 Avl * traiter_ligne_source(Avl* racine, char *id, double volume, double fuite){
-	Avl *n = rechercheAVL(racine,id);
+    Avl *n = rechercheAVL(racine,id);
 	if(n == NULL){
 		Usine u;
 		u.id_usine = strdup(id);
@@ -33,7 +33,7 @@ Avl * traiter_ligne_source(Avl* racine, char *id, double volume, double fuite){
         }
 		u.cap_max_trait = 0;
 		u.volume_total_capte = volume;
-		u.volume_reel_traite = volume * (1.0 -  fuite / 100.0);
+		u.volume_reel_traite = volume * (1.0 - fuite / 100.0);
 		int h =0;
 		racine = insertionAVL(racine,u,&h);
 	}
@@ -144,7 +144,7 @@ Avl * ajouterVal(char *nom_fichier){
 void ajouterFichierMAX(FILE *fichier, Avl *a){
     if(a != NULL){
         ajouterFichierMAX(fichier,a->fd);
-        fprintf(fichier,"%s;%f\n",a->us.id_usine,a->us.cap_max_trait);
+        fprintf(fichier,"%s;%f\n",a->us.id_usine,a->us.cap_max_trait/1000.0);
         ajouterFichierMAX(fichier,a->fg);
     }
 }
@@ -152,7 +152,7 @@ void ajouterFichierMAX(FILE *fichier, Avl *a){
 void ajouterFichierREAL(FILE *fichier, Avl *a){
     if(a != NULL){
         ajouterFichierREAL(fichier,a->fd);
-        fprintf(fichier,"%s;%f\n",a->us.id_usine,a->us.volume_reel_traite);
+        fprintf(fichier,"%s;%f\n",a->us.id_usine,a->us.volume_reel_traite/1000.0);
         ajouterFichierREAL(fichier,a->fg);
     }
 }
@@ -160,7 +160,7 @@ void ajouterFichierREAL(FILE *fichier, Avl *a){
 void ajouterFichierSRC(FILE *fichier, Avl *a){
     if(a != NULL){
         ajouterFichierSRC(fichier,a->fd);
-        fprintf(fichier,"%s;%f\n",a->us.id_usine,a->us.volume_total_capte);
+        fprintf(fichier,"%s;%f\n",a->us.id_usine,a->us.volume_total_capte/1000.0);
         ajouterFichierSRC(fichier,a->fg);
     }
 }
@@ -169,41 +169,41 @@ int creationFichier(char *choix, char *nom_fichier){
     Avl *avl = NULL;
     avl = ajouterVal(nom_fichier);
     if(avl == NULL){
-        return 0;
+        return 1;
     }
     if(comparer_chaine(choix,"max") == 5){
-        FILE *fichier = fopen("vol_max.dat","w"); //lire fichier
+        FILE *fichier = fopen("histo_max.dat","w"); //lire fichier
         if(fichier == NULL){
             exit(5);
         }
-        fprintf(fichier, "identifier / max volume (k.m3.year-1)\n");
+        fprintf(fichier, "identifier ; max volume (M.m3.year)\n");
         ajouterFichierMAX(fichier,avl);
         fclose(fichier);
     }
     else if(comparer_chaine(choix,"src") == 5){
-        FILE *fichier = fopen("vol_src.dat","w"); //lire fichier
+        FILE *fichier = fopen("histo_src.dat","w"); //lire fichier
         if(fichier == NULL){
             exit(5);
         }
-        fprintf(fichier, "identifier / source volume (k.m3.year-1)\n");
+        fprintf(fichier, "identifier ; source volume (M.m3.year)\n");
         ajouterFichierSRC(fichier,avl);
         fclose(fichier);
 
     }
     else if(comparer_chaine(choix,"real") == 5){
-        FILE *fichier = fopen("vol_real.dat","w"); //lire fichier
+        FILE *fichier = fopen("histo_real.dat","w"); //lire fichier
         if(fichier == NULL){
             exit(5);
         }
-        fprintf(fichier, "identifier / real volume (k.m3.year-1)\n");
+        fprintf(fichier, "identifier ; real volume (M.m3.year)\n");
         ajouterFichierREAL(fichier,avl);
         fclose(fichier);
 
     }
     else{
         libererAVL(avl);
-        return 0;
+        return 1;
     }
     libererAVL(avl);
-    return 1;
+    return 0;
 }
