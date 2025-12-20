@@ -43,5 +43,6 @@ Avl * ajouterVal(char *nom_fichier);
 void ajouterFichierMAX(FILE *fichier, Avl *a);
 void ajouterFichierREAL(FILE *fichier, Avl *a);
 void ajouterFichierSRC(FILE *fichier, Avl *a);
+void ajouterFichierALL(FILE *fichier, Avl *a);
 int creationFichier(char *choix, char *nom_fichier);
 
