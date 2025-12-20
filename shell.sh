@@ -83,7 +83,7 @@ verif_fichier() {
 crea_histo() {
     Fichier_sortie="histo_${Option}.dat"
 
-    ./wildwater "$fichier_d" histo "$Option" #> "$Fichier_sortie"
+    ./wildwater "$fichier_d" histo "$Option" 
     if [ $? -ne 0 ]; then
         fct_error "Oups, erreur lors de la generation de l'histo"
     fi
@@ -95,7 +95,7 @@ crea_histo() {
 crea_leaks() {
     Fichier_sortie="leaks.dat"
 
-    ./wildwater "$fichier_d" leaks "$Option" #> "$Fichier_sortie"
+    ./wildwater "$fichier_d" leaks "$Option" 
     if [ $? -ne 0 ]; then
         fct_error "Oups, erreur lors du traitement de leaks"
     fi
