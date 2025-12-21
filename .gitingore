@@ -1,0 +1,5 @@
+*.o
+wildwater
+leaks.dat
+histo_*.dat
+*.png
