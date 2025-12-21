@@ -81,7 +81,7 @@ verif_fichier() {
 }
 
 crea_histo() {
-    Fichier_sortie="histo_${Option}.dat"
+    Fichier_sortie="histo_${Option}_e.dat"
 
     ./wildwater "$fichier_d" histo "$Option" 
     if [ $? -ne 0 ]; then
@@ -93,7 +93,7 @@ crea_histo() {
 
 # lance calcul de fuite
 crea_leaks() {
-    Fichier_sortie="leaks.dat"
+    Fichier_sortie="leaks_e.dat"
 
     ./wildwater "$fichier_d" leaks "$Option" 
     if [ $? -ne 0 ]; then
@@ -107,7 +107,7 @@ crea_leaks() {
 
 
 generation_image() {
-    Fichier_data="histo_${Option}.dat"
+    Fichier_data="histo_${Option}_e.dat"
 
     if [ ! -f "$Fichier_data" ]; then
         fct_error "Fichier pour la generation d'image introuvable : $Fichier_data"
@@ -151,10 +151,10 @@ EOF
 #fonction qui genere l'histogramme pour l'argument "all"
 generation_image_all() {
 
-    Fichier_data="histo_all.dat"
+    Fichier_data="histo_all_e.dat"
 
     if [ ! -f "$Fichier_data" ]; then
-        fct_error "Fichier histo_all.dat introuvable"
+        fct_error "Fichier histo_all_e.dat introuvable"
     fi
 
     gnuplot << EOF

@@ -4,26 +4,47 @@
 #include<time.h>
 #include<string.h>
 
+/*
+ * Déclaration anticipée de la structure Enfant
+ * pour pouvoir l’utiliser dans Noeud.
+ */
 typedef struct enfant Enfant;
 
+
+/*
+ * Structure représentant un nœud.
+ * Chaque nœud a un identifiant et une liste d’enfants.
+ */
 typedef struct noeud{
     char *identifiant;
     Enfant *listes_enfants;
 }Noeud;
 
-typedef struct enfant{
+
+/*
+ * Structure représentant un enfant d’un nœud.
+ * Elle contient le pourcentage de fuite et un pointeur
+ * vers le nœud enfant suivant.
+ */
+struct enfant{
     double pourcentage_fuite;
     Noeud *noeud;
     struct enfant *suivant;
-}Enfant;
+};
 
+
+/*
+ * Structure d’un arbre AVL.
+ * Associe une clé à un nœud et permet un stockage équilibré.
+ */
 typedef struct avl2 {
-    char *id_cle;          
-    Noeud *valeur;      
+    char *id_cle;
+    Noeud *valeur;
     struct avl2 *fg;
     struct avl2 *fd;
     int equilibre;
 }Avl2;
+
 
 
 int recupereLigne1(FILE * nomFichier, char *id_us,char *id_amont,char *id_aval,double *cap, double *fuite);
