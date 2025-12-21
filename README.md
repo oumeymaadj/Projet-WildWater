@@ -36,7 +36,8 @@ Affiche également la durée totale d’exécution.
 
 ### Makefile
 Automatise la compilation du projet et la génération de l’exécutable `wildwater`.  
-Contient également une règle `clean` permettant de supprimer les fichiers générés.
+Le Makefile ajoute également les droits d’exécution au script `shell.sh` afin de permettre son lancement direct depuis le terminal.  
+Contient aussi une règle `clean` permettant de supprimer les fichiers générés.
 
 ---
 
@@ -47,6 +48,8 @@ Contient également une règle `clean` permettant de supprimer les fichiers gén
    ```
    make
    ```
+   Cette commande compile le programme C et attribue automatiquement les droits d’exécution au script `shell.sh`.
+
 3. Utilisez le script Shell pour lancer l’application.
 
 ### Génération des histogrammes
@@ -69,10 +72,20 @@ Les résultats sont enregistrés dans des fichiers `.dat` et les graphiques sont
 
 ---
 
+## Nettoyage
+
+Pour supprimer les fichiers générés (fichiers objets, exécutable, images PNG et fichiers `.dat`) :
+```
+make clean
+```
+
+---
+
 ## Groupe
 
 Oumeyma Adjaimi  
 Nabil Touat  
 Lina Porrinas  
+
 
 
