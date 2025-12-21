@@ -1,5 +1,5 @@
 *.o
 wildwater
-leaks.dat
-histo_*.dat
+leaks.txt
+histo_*.txt
 *.png
