@@ -1,9 +1,6 @@
 #include "leak.h"
 #include "histo.h"
 
-#include "leak.h"
-#include "histo.h"
-
 int main(int argc, char *argv[]){
 
     /*
