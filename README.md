@@ -1,90 +1,78 @@
-# Projet C-WildWater
-Filière PréING2 – Année 2025–2026
+# Projet C-WildWater (Projet CY-Tech PréING2)
 
-## Auteurs
-- Adjaimi Oumeyma
-- Nabil  Touat
-- Lina Porrinas
+Une application en C et Shell permettant d’analyser un réseau de distribution d’eau potable :
+- traitement de données massives issues d’un fichier CSV  
+- analyse des volumes captés, traités et réellement distribués  
+- calcul des pertes d’eau sur l’ensemble du réseau aval d’une usine  
+- génération d’histogrammes via gnuplot  
+- gestion efficace des données grâce aux structures AVL  
 
-## Description générale
-Ce projet a pour objectif de développer une application permettant d’analyser et de synthétiser des données massives issues d’un système de distribution d’eau potable.  
-Les données sont fournies sous la forme d’un fichier CSV décrivant les différents acteurs du réseau (sources, usines de traitement, stockages, jonctions, raccordements et usagers), ainsi que les volumes d’eau et les pertes associées.
+---
 
-L’application repose sur deux parties principales :
-- un programme en langage C, chargé des calculs lourds et du traitement des données,
-- un script Shell, servant de point d’entrée utilisateur, assurant la vérification des arguments, la compilation, l’exécution du programme et la génération des graphiques.
+## Descriptif des fichiers
 
-## Organisation du projet
-.
-├── main.c              : programme principal
-├── histo.c / histo.h   : gestion des histogrammes (AVL des usines)
-├── fonction_base.c     : fonctions AVL et lecture du fichier CSV pour les histogrammes
-├── leak.c / leak.h     : calcul des fuites (réseau aval et AVL des nœuds)
-├── shell.sh            : script Shell (interface utilisateur)
-├── Makefile            : compilation du projet
-├── README.md           : documentation
+### main.c
+Point d’entrée principal du programme.  
+Gère le choix du mode de fonctionnement (histogrammes ou calcul des fuites) et appelle les fonctions adaptées selon les arguments fournis.
 
-## Compilation
-La compilation du projet est entièrement gérée par le Makefile.
+### histo.c / histo.h
+Gère la création et la manipulation d’un AVL d’usines.  
+Implémente le calcul des capacités maximales, des volumes captés par les sources et des volumes réellement traités.  
+Permet la génération des fichiers de données nécessaires aux histogrammes.
 
-Commande de compilation :
-make
+### fonction_base.c
+Contient les fonctions de base liées aux AVL utilisés pour les histogrammes :  
+création, insertion, recherche, équilibrage et libération de la mémoire, ainsi que la lecture et le traitement du fichier CSV.
 
-Cette commande génère l’exécutable :
-wildwater
+### leak.c / leak.h
+Implémente le calcul des fuites d’eau pour une usine donnée.  
+Construit un réseau arborescent représentant l’aval de l’usine à l’aide d’un AVL de nœuds et de listes chaînées.  
+Effectue un calcul récursif des pertes en tenant compte de la répartition équitable des volumes et des pourcentages de fuite.
 
-Le script shell.sh est automatiquement rendu exécutable.
+### shell.sh
+Script Shell servant de point d’entrée utilisateur.  
+Vérifie la validité des arguments, compile le projet si nécessaire, lance le programme C et génère les histogrammes au format PNG à l’aide de gnuplot.  
+Affiche également la durée totale d’exécution.
 
-## Utilisation
-Le script shell.sh constitue le point d’entrée unique de l’application.
+### Makefile
+Automatise la compilation du projet et la génération de l’exécutable `wildwater`.  
+Contient également une règle `clean` permettant de supprimer les fichiers générés.
 
-### Histogrammes des usines
-Commande :
+---
+
+## Compilation & exécution
+
+1. Ouvrez un terminal à la racine du projet.  
+2. Compilez le projet :
+   ```
+   make
+   ```
+3. Utilisez le script Shell pour lancer l’application.
+
+### Génération des histogrammes
+```
 ./shell.sh <fichier_csv> histo <option>
+```
 
-Options possibles :
-- max  : capacité maximale de traitement des usines
-- src  : volume total capté par les sources
-- real : volume réellement traité après pertes
-- all  : histogramme cumulé des trois valeurs (option bonus)
-
-Exemples :
-./shell.sh data.csv histo max
-./shell.sh data.csv histo src
-./shell.sh data.csv histo real
-./shell.sh data.csv histo all
-
-Résultats :
-- génération d’un fichier .dat contenant les données
-- création d’images .png représentant les histogrammes via gnuplot
+Options disponibles :
+- `max`  : capacité maximale de traitement des usines  
+- `src`  : volume total capté par les sources  
+- `real` : volume réellement traité après pertes  
+- `all`  : histogramme cumulé des trois valeurs  
 
 ### Calcul des fuites d’une usine
-Commande :
+```
 ./shell.sh <fichier_csv> leaks "<identifiant_usine>"
+```
 
-Exemple :
-./shell.sh c-wildwater_v0.csv leaks "Facility complex #RH400057F"
+Les résultats sont enregistrés dans des fichiers `.dat` et les graphiques sont générés au format `.png`.
 
-Résultats :
-- ajout d’une ligne dans le fichier leaks_e.dat contenant l’identifiant de l’usine et le volume total de fuites
-- si l’usine n’existe pas ou si aucun volume n’arrive à l’usine, la valeur -1 est enregistrée
+---
 
-## Choix techniques
-- Utilisation de structures AVL pour garantir une complexité logarithmique lors des recherches et insertions.
-- Lecture du fichier CSV ligne par ligne afin de limiter l’empreinte mémoire.
-- Construction d’un réseau arborescent pour le calcul récursif des fuites en aval d’une usine.
-- Libération systématique de la mémoire allouée avant la fin du programme.
-- Séparation claire entre les calculs (programme C) et l’orchestration/visualisation (script Shell et gnuplot).
+## Groupe
 
-## Tests et résultats
-Les fichiers .dat et les images .png générés lors des tests sont reproductibles à partir des commandes décrites ci-dessus, en utilisant le fichier CSV fourni.
+Oumeyma Adjaimi  
+Nabil Touat  
+Lina Porrinas  
 
-## Nettoyage
-Pour supprimer les fichiers générés (fichiers objets, exécutable, images et données) :
-make clean
-
-## Remarques
-- Le programme est générique et peut fonctionner avec tout fichier CSV respectant la même structure.
-- Les erreurs d’arguments ou de fichiers sont gérées par le script Shell avec des messages explicites.
-- La durée totale d’exécution du script est affichée à la fin de chaque traitement.
 
