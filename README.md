@@ -122,5 +122,6 @@ Génère les fichiers `histo_*.dat` et les graphiques `.png`.
 ## Auteurs
 
 Nabil Touat  
-Zinedine Zouini  
-Ikram-Fatima Azzi
+oumeyma 
+lina
+
