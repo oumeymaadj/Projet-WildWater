@@ -3,7 +3,7 @@ Filière PréING2 – Année 2025–2026
 
 ## Auteurs
 - Adjaimi Oumeyma
-- Nabil
+- Nabil  Touat
 - Lina Porrinas
 
 ## Description générale
