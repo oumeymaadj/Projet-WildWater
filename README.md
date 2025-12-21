@@ -122,6 +122,7 @@ Génère les fichiers `histo_*.dat` et les graphiques `.png`.
 ## Auteurs
 
 Nabil Touat  
-oumeyma 
-lina
+oumeyma  lina
+
+
 
