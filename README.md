@@ -1,4 +1,4 @@
-# Projet C-WildWater (Projet CY-Tech PréING2)
+# :droplet: Projet C-WildWater (Projet CY-Tech PréING2)
 
 Une application en C et Shell permettant d’analyser un réseau de distribution d’eau potable :
 - traitement de données massives issues d’un fichier CSV  
@@ -9,7 +9,7 @@ Une application en C et Shell permettant d’analyser un réseau de distribution
 
 ---
 
-## Descriptif des fichiers
+## :file_folder: Descriptif des fichiers
 
 ### main.c
 Point d’entrée principal du programme.  
@@ -41,7 +41,7 @@ Contient aussi une règle `clean` permettant de supprimer les fichiers généré
 
 ---
 
-## Compilation & exécution
+## :arrow_forward: Compilation & exécution
 
 1. Ouvrez un terminal à la racine du projet.  
 2. Compilez le projet :
@@ -52,7 +52,7 @@ Contient aussi une règle `clean` permettant de supprimer les fichiers généré
 
 3. Utilisez le script Shell pour lancer l’application.
 
-### Génération des histogrammes
+### :bar_chart: Génération des histogrammes
 ```
 ./shell.sh <fichier_csv> histo <option>
 ```
@@ -63,7 +63,7 @@ Options disponibles :
 - `real` : volume réellement traité après pertes  
 - `all`  : histogramme cumulé des trois valeurs  
 
-### Calcul des fuites d’une usine
+### :abacus: Calcul des fuites d’une usine
 ```
 ./shell.sh <fichier_csv> leaks "<identifiant_usine>"
 ```
@@ -72,7 +72,7 @@ Les résultats sont enregistrés dans des fichiers `.dat` et les graphiques sont
 
 ---
 
-## Nettoyage
+## :broom: Nettoyage
 
 Pour supprimer les fichiers générés (fichiers objets, exécutable, images PNG et fichiers `.dat`) :
 ```
@@ -81,7 +81,7 @@ make clean
 
 ---
 
-## Groupe
+## :busts_in_silhouette: Groupe
 
 Oumeyma Adjaimi  
 Nabil Touat  
